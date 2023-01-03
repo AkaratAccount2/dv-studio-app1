@@ -1,0 +1,194 @@
+@import '~antd/dist/antd.css';
+
+.App {
+  text-align: center;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.login-success {
+  font: inherit;
+  font-weight: bold;
+  font-size: 18px;
+  display: table;
+  color: white;
+}
+
+.container {
+  content: "";
+  display: inline-flexbox;
+  clear: both;
+}
+
+.container div {
+  float: left; 
+}
+
+.global-header {
+  height: 64px;
+  padding: 0 16px;
+  width: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all .3s,padding 0s;
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+.not-found {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.error {
+  font: inherit;
+  font-size: 14px;
+  display: block;
+  color: #e91010;
+}
+
+#dropdown-menu {
+  float: right;
+  padding: 0 15px;
+}
+
+.dropdown-menu-item {
+  position: relative;
+  top: 29px; 
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.ant-advanced-search-form {
+  padding: 24px 12px;
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+}
+
+.ant-advanced-search-form .ant-form-item {
+  display: flex;
+}
+
+.ant-advanced-search-form .ant-form-item-control-wrapper {
+  flex: 1;
+}
+
+.trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 15px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.trigger:hover {
+  color: #1890ff;
+}
+
+.circle {
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+  font-size: 12px;
+  font: bold;
+  color: #fff;
+}
+
+.dot {
+  height: 11px;
+  width: 11px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.welcome {
+  display: 'inline-block'; 
+  text-align: 'center';
+  width: '100px';
+  word-wrap: 'break-word';
+  margin-left: '-4px';
+}
+
+#wrapper {
+  display: flex;
+}
+
+#left {
+  flex: 0 0 33%;
+  min-width: '288px';
+}
+
+#search {
+  display: 'inline-flex';
+  min-width: '288px';
+}
+
+#right {
+  flex: 1;
+  text-align: right;
+}
+
+.header-nav {
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.fields {
+  height: 400px;
+  width: 300px;
+  padding: 24px;
+  overflow-x: auto;
+  margin-bottom: 15px;
+}
+
+.ExcelTable2007 TH {
+  background-image: url(data:image/gif;base64,R0lGODlhAQATAPcAAAAAAAAASAAAdCdBPgBISABIdCZBYyZBZCZBZUgAAHQAAEgASEgAdHQASHQAdEhIAFBBPlFBPlNBPlFlPnRIAHBBPnFBPnJBPnNBPnRBPnVBPnR0AHRlPkhISFFBY1FBZFFBZXRBZXZBZHR0SHR0dABInAB0vyZBhCZBhSZBhiZBhyZlhyZjoCZkoiZkoyZlpCZlpiZmpUhInFFBh1JBhUh0v1FlpnRInHRlpnR0v3aFZCaAuyaFwCaFwkicnEicv3ScnGiMr3S/v0ic31GFwlCc1lCe1lGe11Gf2FGhwlKg2VKh21Gh3VOj3HS73XS/33C07XG373K48HO58XW683S793W89He/9nS//5xIAJx0AI5jPo9jPpBkPpFkPpNkPpNlPpVlPpZlPpdmPphmPr90AJxISJxIdL90SKmAPq+FPrGEPraGPpycdL+cSK+FZb+/dN+cSMObY8ScY8ieY8qfZN+cdMuhZc6hZM+jZN+/dP+/dJy/nJ62zpzfv7/fnL//v5zf347L7Y/N7pHQ8JPT8ZPU95fW9Zzf/6nE6bHG4bDL77rM5rvN573P6LDP977Q6b/R6q/s3b//36rk7qzm767o8K/q8a/s97Hr87Pt9Lbx9r///921hN+3hOG4hOO5heS7h+i8heq9ht/fnM7VpN3Nodviu9/mvN//v//fnOHQouPTo+bTpOTUpuzZpeHovePqvubrv///v8HT68LU7MTV7cXX7sbY78LZ98jZ8NDX5dfa4tPb6dXd6tff69ve5dvi1N3k1t/m1t//38Pi7cjo8Mrq8cvs987t9Nnh7Nvi7d/i6N3k7t/m79Xk8tfm99Lx9t///+TswujtwOrvwOHo1+Pq2Obr2eTs3ejt2+rv3Ozx3P//3+Ll6ubp7eHo8OPq8ebr8+Ts9+rs8Ojt9Orv9e7v8+zx9u7z9/Lz9vD0+PL2+fb3+PT4+vb6+/n6+/n8/f///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAAQATAAAIGADjvXPHbl06dObKiQsHzlmzZcp++eoVEAA7);
+  background-repeat: repeat-x; 
+	font-weight: bold;
+	font-size: 14px;
+	border: 1px solid #9EB6CE;
+	border-width: 0px 1px 1px 0px;
+	height: 17px;
+	line-height: 17px;
+}
+
+.ExcelTable2007 TD {
+	border: 0px;
+	background-color: white;
+	padding: 0px 4px 0px 2px;
+	border: 1px solid #D0D7E5;
+	border-width: 0px 1px 1px 0px;
+}
+
+.ExcelTable2007 TD B {
+	border: 0px;
+	background-color: white;
+	font-weight: bold;
+}
+
+.ExcelTable2007 TD.heading {
+	background-color: #E4ECF7;
+	text-align: center;
+	border: 1px solid #9EB6CE;
+	border-width: 0px 1px 1px 0px;
+	font-weight: bold;
+}
+
+.ExcelTable2007 TH.heading {
+  background-image: url(data:image/gif;base64,R0lGODlhAQATAPcAAAAAAAAASAAAdCdBPgBISABIdCZBYyZBZCZBZUgAAHQAAEgASEgAdHQASHQAdEhIAFBBPlFBPlNBPlFlPnRIAHBBPnFBPnJBPnNBPnRBPnVBPnR0AHRlPkhISFFBY1FBZFFBZXRBZXZBZHR0SHR0dABInAB0vyZBhCZBhSZBhiZBhyZlhyZjoCZkoiZkoyZlpCZlpiZmpUhInFFBh1JBhUh0v1FlpnRInHRlpnR0v3aFZCaAuyaFwCaFwkicnEicv3ScnGiMr3S/v0ic31GFwlCc1lCe1lGe11Gf2FGhwlKg2VKh21Gh3VOj3HS73XS/33C07XG373K48HO58XW683S793W89He/9nS//5xIAJx0AI5jPo9jPpBkPpFkPpNkPpNlPpVlPpZlPpdmPphmPr90AJxISJxIdL90SKmAPq+FPrGEPraGPpycdL+cSK+FZb+/dN+cSMObY8ScY8ieY8qfZN+cdMuhZc6hZM+jZN+/dP+/dJy/nJ62zpzfv7/fnL//v5zf347L7Y/N7pHQ8JPT8ZPU95fW9Zzf/6nE6bHG4bDL77rM5rvN573P6LDP977Q6b/R6q/s3b//36rk7qzm767o8K/q8a/s97Hr87Pt9Lbx9r///921hN+3hOG4hOO5heS7h+i8heq9ht/fnM7VpN3Nodviu9/mvN//v//fnOHQouPTo+bTpOTUpuzZpeHovePqvubrv///v8HT68LU7MTV7cXX7sbY78LZ98jZ8NDX5dfa4tPb6dXd6tff69ve5dvi1N3k1t/m1t//38Pi7cjo8Mrq8cvs987t9Nnh7Nvi7d/i6N3k7t/m79Xk8tfm99Lx9t///+TswujtwOrvwOHo1+Pq2Obr2eTs3ejt2+rv3Ozx3P//3+Ll6ubp7eHo8OPq8ebr8+Ts9+rs8Ojt9Orv9e7v8+zx9u7z9/Lz9vD0+PL2+fb3+PT4+vb6+/n6+/n8/f///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAAQATAAAIGADjvXPHbl06dObKiQsHzlmzZcp++eoVEAA7);
+  background-repeat: none;
+}
