@@ -12,12 +12,14 @@ import {
 // import { NotFoundPage } from './pages/404.page'
 
 import { initialState, AppProvider } from './provider/app.provider'
-import { useImmerReducer } from 'use-immer'
+
 import reducer from './reducers/app.reducer'
 // import { AppLayout } from './components/app.layout'
 
+//[removed]
+//import { useImmerReducer } from 'use-immer'
 function App() {
-  const [state, dispatch] = useImmerReducer(reducer, initialState)
+  //const [state, dispatch] = useImmerReducer(reducer, initialState)
   return (
     <div> Davinci studio </div>
     // <AppProvider dispatch={dispatch} state={state}>
