@@ -6,10 +6,8 @@ export const initialState: State = {
         username: '',
         password: '',
         role: '',
-        sitegroup: '',
-        channel: '',
-        store_merchant_id: '',
-        channel_email: ''
+        grant_permission: '',
+        decline_permission: ''
     },
     data: {
         grabOrderId: '',

@@ -1,6 +1,8 @@
 import { AuthenticationAction, State } from '../types/app.type'
+import { produce } from 'immer'
 
 export default function reducer(draftState: State, action: AuthenticationAction): State {
+    return produce(draftState,(draftState) => {
     switch (action.type) {
         case 'field':
             if (action.fieldName === 'username') {
@@ -25,9 +27,7 @@ export default function reducer(draftState: State, action: AuthenticationAction)
             draftState.isLoggedIn = true
             draftState.isLoading = false
             draftState.user.role = action.role
-            draftState.user.sitegroup = action.sitegroup
-            draftState.user.channel = action.channel
-            draftState.user.channel_email = action.channel_email
+            draftState.user.grant_permission = action.grant_permission
             return draftState
         case 'error':
             draftState.error = action.message
@@ -51,4 +51,5 @@ export default function reducer(draftState: State, action: AuthenticationAction)
         default:
             return draftState
     }
+  })
 }

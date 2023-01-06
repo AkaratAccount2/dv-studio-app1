@@ -12,12 +12,27 @@ type LoginProps = {
 }
 
 const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
+    labelCol: {
+        xs: { span: 24 },
+        sm: { span: 8 },
+    },
+    wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+    },
 }
 
 const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
+    wrapperCol: {
+        xs: {
+            span: 24,
+            offset: 0,
+        },
+        sm: {
+            span: 16,
+            offset: 8,
+        },
+    },
 }
 
 export default function LogInForm(props: LoginProps) {
@@ -26,24 +41,24 @@ export default function LogInForm(props: LoginProps) {
             {...layout}
             form={props.form}
             name="login-form"
-            initialValues={{ username:'', password:'' }}
+            initialValues={{ username: '', password: '' }}
             onFinish={props.onFinish}
         >
             {props.data.error && <p className="error">{props.data.error}</p>}
             <Form.Item
                 label="Username"
                 name="Username"
-                rules={[{ required: true, message: 'Username is required'}]}
+                rules={[{ required: true, message: 'Username is required' }]}
             >
-                <Input 
+                <Input
                     placeholder="username"
                     prefix={<UserOutlined className="site-form-item-icon" />}
                     value={props.data.user.username}
                     onChange={e => props.dispatch({
-                            type: 'field',
-                            fieldName: 'username',
-                            payload: e.currentTarget.value
-                        })
+                        type: 'field',
+                        fieldName: 'username',
+                        payload: e.currentTarget.value
+                    })
                     }
                 />
             </Form.Item>
@@ -52,17 +67,17 @@ export default function LogInForm(props: LoginProps) {
                 name="Password"
                 rules={[{ required: true, message: 'Password is required' }]}
             >
-                <Input 
+                <Input
                     placeholder="password"
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
                     autoComplete="new-password"
                     value={props.data.user.password}
                     onChange={e => props.dispatch({
-                            type: 'field',
-                            fieldName: 'password',
-                            payload: e.currentTarget.value,
-                        })
+                        type: 'field',
+                        fieldName: 'password',
+                        payload: e.currentTarget.value,
+                    })
                     }
                 />
             </Form.Item>

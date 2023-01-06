@@ -9,18 +9,16 @@ import {
 
 import { LandingPage } from './pages/landing.page'
 import { NotFoundPage } from './pages/404.page'
-
-// import { ProtectedRoute } from './routes/protected.route'
-
-
+import { UserNotFoundPage } from './pages/404.page.user.not.found'
+import { ProtectedRoute } from './routes/protected.route'
+import { AppLayout } from './components/app.layout'
 
 import { initialState, AppProvider } from './provider/app.provider'
-
 import reducer from './reducers/app.reducer'
-// import { AppLayout } from './components/app.layout'
 
 //[removed]
 //import { useImmerReducer } from 'use-immer'
+
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -30,7 +28,8 @@ function App() {
         <Router>
           <Switch>
             <Route exact path="/" component={LandingPage} />
-            {/* <ProtectedRoute exact path='/admin' component={AppLayout} /> */}
+            <Route exact path="/user_not_found" component={UserNotFoundPage} />
+            <ProtectedRoute exact path='/admin' component={AppLayout} />
             <Route component={NotFoundPage} />
           </Switch>
         </Router>

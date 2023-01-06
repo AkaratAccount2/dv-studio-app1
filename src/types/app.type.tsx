@@ -12,10 +12,8 @@ export type User = {
     username: string
     password: string
     role: string
-    sitegroup: string
-    channel: string
-    store_merchant_id: string
-    channel_email: string
+    grant_permission: string
+    decline_permission: string
 }
 
 export type Data = {
@@ -34,7 +32,8 @@ interface SetLogInAction {
 }
 
 interface SetSuccessAction {
-    type: 'success' ,role: string ,sitegroup: string ,channel: string , channel_email: string
+    type: 'success' ,role: string ,grant_permission: string
+    // sitegroup: string ,channel: string , channel_email: string
 } 
 
 interface SetErrorAction {
