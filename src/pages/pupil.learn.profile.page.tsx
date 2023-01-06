@@ -102,8 +102,8 @@ const PupilLearnProfilePaege: React.FC<Props> = (props: Props) => {
     const generateCodeNumber = async () => {
         const currentYear = new Date().getFullYear().toString().substr(-2);
         const currentMonth = ('0' + (new Date().getMonth() + 1).toString()).substr(-2);
-        const currentDay = new Date().getDate().toString().substr(-2);
-        const _codeNumber = `${currentYear}${currentMonth}${currentDay}${Math.random().toString(36).substr(2, 3).toUpperCase()}`;
+        const currentDay = `0${new Date().getDate()}`.slice(-2); //new Date().getDate().toString().substr(-2);
+        const _codeNumber = `${currentYear}${currentMonth}${currentDay}CR${Math.random().toString(10).substr(2, 3).toUpperCase()}`;
         let _formValues = { ...formValues };
         _formValues.learnNo = _codeNumber
         setFormValues(_formValues);

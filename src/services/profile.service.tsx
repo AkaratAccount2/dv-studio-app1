@@ -44,6 +44,27 @@ export async function getProfileUserCode(usercode: string){
     }
 }
 
+export async function getMaxUserCode(currentYear: string){
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' , 'cache-control' : 'no-cache'}
+    };
+    const host = process.env.REACT_APP_SERVER_HOST || ''
+    const route_path = process.env.REACT_APP_CONTEXT_PATH || ''
+
+    try {
+        const response = await fetch(host+route_path+ `/v1/profile/max_usercode/${currentYear}`, requestOptions)
+        const data = await response.json()
+        if (!response.ok) {
+            const error = (data && data.message) || response.status
+            return Promise.reject(error)
+        }
+        return data
+    } catch (error_1) {
+        console.error('There was an error!', error_1)
+    }
+}
+
 export async function searchProfile(formValues: any){
     const requestOptions = {
         method: 'POST',

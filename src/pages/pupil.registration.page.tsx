@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Row, Col, Modal, Form, Input, DatePicker, Select, Button } from 'antd';
-import { getProfileUserCode, saveNewProfile, getStudentType } from './../services/profile.service'
+import { getProfileUserCode, getMaxUserCode, saveNewProfile, getStudentType } from './../services/profile.service'
 import { useHistory } from 'react-router'
 // type Props = {
 //     grabOrderId: string
@@ -96,9 +96,14 @@ const PupilRegistration = () => {
 
     const generateCodeNumber = async () => {
         const currentYear = new Date().getFullYear().toString().substr(-2);
-        const _codeNumber = `${currentYear}${Math.random().toString(36).substr(2, 6).toUpperCase()}`;  //const codeNumber = `${currentYear}${Number(0.09133335960023081).toString(36).substr(2, 6).toUpperCase()}`;
-        const person = await getProfileUserCode(_codeNumber)
-        console.log(person)
+        const max_usercode = await getMaxUserCode(currentYear) //console.log(max_usercode) // emtry is []
+        let new_usercode = max_usercode.length == 0 ? 1 : Number(max_usercode[0].usercode) +1
+        if(new_usercode === 1){
+            new_usercode = Number(`${currentYear}000${new_usercode}`)
+        }
+        let _codeNumber = String(new_usercode)   //const _codeNumber = `${currentYear}${Math.random().toString(36).substr(2, 6).toUpperCase()}`;  //const codeNumber = `${currentYear}${Number(0.09133335960023081).toString(36).substr(2, 6).toUpperCase()}`;
+        
+        const person = await getProfileUserCode(_codeNumber) //console.log(person)
         if (!person?.usercode) {
             let _formValues = { ...formValues };
             _formValues.codeNumber = _codeNumber
