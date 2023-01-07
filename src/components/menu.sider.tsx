@@ -45,6 +45,9 @@ export const MenuSider = () => {
                         <Menu.Item key="2_3">
                             <Link to="/payment/create">New Payment</Link>
                         </Menu.Item>
+                        {/* <Menu.Item key="2_4">
+                            <Link to="/payment/receipt">View Receipt</Link>
+                        </Menu.Item> */}
                     </SubMenu>
                 </Menu>
             </Layout.Sider>
