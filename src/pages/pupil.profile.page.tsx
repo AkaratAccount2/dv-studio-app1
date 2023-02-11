@@ -129,10 +129,10 @@ const PersonProfilePage: React.FC<Props> = (props: Props) => {
     ];
 
     return (
-        <Layout>
-            <Layout.Header className="site-layout-background" style={{ padding: '0 10px' }}>
+        <Layout className="site-layout-background">
+            <Layout.Header className="site-layout-background"  style={{ padding: '0 10px' }}>
                 <div className="container">
-                    <Button type="primary" onClick={() => {
+                    <Button type="primary" shape="round" onClick={() => {
                         window.history.back()
                     }}
                         icon={<LeftOutlined />}

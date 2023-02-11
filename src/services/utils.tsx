@@ -1,3 +1,34 @@
+const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    timeZone: "Asia/Bangkok"
+  };
+
+//DD/MM/YYYT to YYYY-MM-DD
+function convertDateFormat(dateString) {
+    const dateParts = dateString.split("/");
+    return `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+}
+
+//write function to convert date time string "2023-01-10T17:00:00.000Z" to "2023-01-11 00:00:00"
+export function convertUTCDateTimeToBangkokLocalTime(utcDateTime) {
+    // Create a new Date object from the UTC date time string
+    let date = new Date(utcDateTime);
+  
+    // // Get the time offset in milliseconds for Bangkok
+    let offset = 420 * 60 * 1000;
+  
+    // // Convert the UTC time to Bangkok local time by adding the offset
+    let localDateTime = new Date(date.getTime() + offset);
+  
+
+    // Return the local date time as a formatted string
+    return localDateTime.toISOString().slice(0, 10);         //convertDateFormat(date.toLocaleString('en-US', options).slice(0,10));
+  }
 
 export function datetimeConvertToDB(dateTimeString){
     //const dateTimeString = '2023-01-05T04:44:04.333Z';

@@ -16,15 +16,33 @@ export const Auth = {
 }
 
 export async function authen(user: User) {
-    const response = await fetch(getUrl('/v1/authen'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            username: user.username,
-            password: user.password
+    try {
+        const response = await fetch(getUrl('/v1/authen'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: user.username,
+                password: user.password
+            })
         })
-    })
-    const json = await response.json()
-    //return json.message
-    return json
+        console.log(response)
+        const json = await response.json()
+        //return json.message
+        return json
+    }
+    catch (error) {
+        console.log(error)
+        return error
+    }
+    // const response = await fetch(getUrl('/v1/authen'), {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({
+    //         username: user.username,
+    //         password: user.password
+    //     })
+    // })
+    // const json = await response.json()
+    // //return json.message
+    // return json
 }

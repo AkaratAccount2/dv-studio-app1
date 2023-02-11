@@ -26,6 +26,27 @@ export default function LogInPage() {
                     dispatch({ type: 'success' ,role: response.results.role ,grant_permission: response.results.grant_permission})
                     history.push("/admin")
                 })
+            } else if (response.message === 'Invalid username or password') {
+                dispatch({ type: 'error', message: response.message })
+                form.resetFields()
+            } else if (response.message === 'User is not active') {
+                dispatch({ type: 'error', message: response.message })
+                form.resetFields()
+            } else if (response.message === 'User is locked') {
+                dispatch({ type: 'error', message: response.message })
+                form.resetFields()
+            } else if (response.message === 'User is expired') {
+                dispatch({ type: 'error', message: response.message })
+                form.resetFields()
+            } else if (response.message === 'User is disabled') {
+                dispatch({ type: 'error', message: response.message })
+                form.resetFields()
+            } else if (response.message === 'User is not found') {
+                dispatch({ type: 'error', message: response.message })
+                form.resetFields()
+            } else if (response.message === 'Failed to fetch') {
+                dispatch({ type: 'error', message: 'Connection is error ,please contact administrator' })
+                form.resetFields()
             } else {
                 dispatch({ type: 'error', message: response.message })
                 history.push("/")

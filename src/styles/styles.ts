@@ -37,6 +37,10 @@ const styles: CSSClasses = {
     flex: 1,
     paddingRight: '8px',
   },
+  'w-auto-left': {
+    flex: 1,
+    paddingLeft: '8px',
+  },
 
   'ml-30': {
     flex: 1,
@@ -60,6 +64,14 @@ const styles: CSSClasses = {
 
   'w-60': {
     width: '60%',
+  },
+  
+  'w-70': {
+    width: '70%',
+  },
+
+  'w-30': {
+    width: '30%',
   },
 
   'w-40': {
@@ -105,6 +117,9 @@ const styles: CSSClasses = {
   'p-4-8': {
     padding: '4px 8px',
   },
+  'p-8-4': {
+    padding: '8px 4px',
+  },
 
   'p-5': {
     padding: '5px',
@@ -114,16 +129,37 @@ const styles: CSSClasses = {
     paddingBottom: '10px',
   },
 
+  left: {
+    textAlign: 'left',
+  },
+
   right: {
     textAlign: 'right',
   },
+
+  center: {
+    textAlign: 'center',
+  },
+
 
   bold: {
     fontWeight: 'bold',
   },
 
+  'fs-11': {
+    fontSize: '11px',
+  },
+
+  'fs-14': {
+    fontSize: '14px',
+  },
+
   'fs-20': {
     fontSize: '20px',
+  },
+
+  'fs-30': {
+    fontSize: '30px',
   },
 
   'fs-45': {
@@ -135,10 +171,15 @@ const styles: CSSClasses = {
     fontSize: '13px',
     color: '#555',
     padding: '40px 35px',
+    border: '1px solid #e3e3e3',
   },
 
   span: {
     padding: '4px 12px 4px 0',
+  },
+
+  'span-left': {
+    padding: '0px 0px 0px 24px',
   },
 
   logo: {

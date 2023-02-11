@@ -9,7 +9,7 @@ import PupilLearnProfilePaege from './../pages/pupil.learn.profile.page'
 import PupilLearnCheckPointPaege from './../pages/pupil.learn.checkpoint.page'
 import PupilLearnSearch from './../pages/pupil.learn.search.page'
 import PaymentPage from './../pages/payment.page'
-//import InvoicePage from './../pages/payment.invoice.page'
+import PaymentSearch from './../pages/payment.search.page'
 
 export const AppContent = () => {
     const location = useLocation();
@@ -58,7 +58,8 @@ export const AppContent = () => {
                                     }}  />
                     <Route exact path={["/class/search"]} component={PupilLearnSearch} />
                     <Route exact path={["/payment/create"]} component={PaymentPage} />
-                    {/* <Route exact path={["/payment/receipt"]} component={InvoicePage} /> */}
+                    <Route exact path={["/payment/search"]} component={PaymentSearch} />
+                    {/* <Route exact path={["/payment/receipt"]} component={PrintPage} /> */}
                 </Switch>
             </Layout.Content>
         </Router>
