@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Layout, Modal, Form, Input, DatePicker, Select, Button, Steps, InputNumber, Divider, Collapse, Alert, Space, Spin ,Result} from 'antd';
+import { Layout, Modal, Form, Input, DatePicker, Select, Button, Steps, InputNumber, Divider, Collapse, Alert, Space, Spin, Result } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBahtSign } from '@fortawesome/free-solid-svg-icons';
 //import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
-import { getPaymentOption, sendReceiptMail ,saveNewPayment } from './../services/profile.service'
+import { getPaymentOption, sendReceiptMail, saveNewPayment } from './../services/profile.service'
 import { useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router'
 import { useReactToPrint } from 'react-to-print';
@@ -79,11 +79,12 @@ const PaymentPage: React.FC = () => {
     });
     const [currentStep, setCurrentStep] = useState<number>(1); //handle STEPs Component
     const documentRef = useRef<HTMLDivElement>(null);
-    const [pdfDataBlob, setPdfDataBlob] = useState<Blob>();
+    const [pdfDataBlob, setPdfDataBlob] = useState<Blob>(new Blob());
 
     //*** Begin: Handle selection drop down */
     const [options, setOptions] = useState<OptionType[]>([]);
     const [loading, setLoading] = useState(true);
+    
     useEffect(() => {
         const fetchOptions = async () => {
             try {
@@ -121,14 +122,20 @@ const PaymentPage: React.FC = () => {
     const handlePrintOut = async (values: FormValues) => {
         //callComponentView();
         callComponentPrint();
-        setCurrentStep(3)
-        //save payment to database
-        await saveNewPayment(formValues)
-        //send it email
-        await sendReceiptMail(values, pdfDataBlob?? new Blob())
-        setCurrentStep(4);
     };
     //const callComponentView = useReactToPrint({
+
+    const sendBlobData = async(pdfData: Blob,values: FormValues) => {
+         setCurrentStep(3)
+         //save payment to database
+         await saveNewPayment(formValues)
+         //wait 3 seconds
+         await new Promise(resolve => setTimeout(resolve, 3000));
+ 
+         //send it email
+         await sendReceiptMail(values, pdfData ?? new Blob())
+         setCurrentStep(4);
+    }
 
     //Hook service to print a document
     const callComponentPrint = useReactToPrint({
@@ -136,31 +143,32 @@ const PaymentPage: React.FC = () => {
         print: async (printIframe) => {
             const document = printIframe.contentDocument;
             if (document) {
-              const html = document.getElementsByTagName("html")[0];
-              console.log(html);
+                const html = document.getElementsByTagName("html")[0];
+                console.log(html);
 
-              html2canvas(html).then((canvas) => {
-                // You can use the canvas object to create an image, or you can convert it to a data URL.
-                const imgData = canvas.toDataURL('image/png');
-                // You can use the imgData in your project as you see fit.
-                var pdf = new _jspdf.default();
-                pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
-                pdf.save(formValues.paymentNo + '.pdf')
-                //get pdf   
-                const pdf2 = new _jspdf.default('p', 'pt', 'a4');
-                pdf2.addImage(imgData, 'PNG', 0, 0, 210, 297);
-                const pdfData = pdf2.output('blob');
-                setPdfDataBlob(pdfData);
-                //const pdfData = pdf2.output('bloburi');
-                //const pdfData = pdf2.output('arraybuffer');
-                //const pdfData = pdf2.output('datauristring');
-                //const pdfData = pdf2.output('dataurlnewwindow');
-              });
+                html2canvas(html).then(async (canvas) => {
+                    // You can use the canvas object to create an image, or you can convert it to a data URL.
+                    const imgData = canvas.toDataURL('image/png');
+                    // You can use the imgData in your project as you see fit.
+                    var pdf = new _jspdf.default();
+                    pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
+                    pdf.save(formValues.paymentNo + '.pdf')
+                    //get pdf   
+                    let pdf2 = new _jspdf.default(); //_jspdf.default('p', 'pt', 'a4');
+                    pdf2.addImage(imgData, 'PNG', 0, 0, 210, 297);
+                    let pdfData = pdf2.output('blob');
 
-              //const exporter = new Html2Pdf(html,{filename:"Nota Simple.pdf"});
-              //exporter.getPdf(true);
+                    await sendBlobData(pdfData,formValues);
+                    //const pdfData = pdf2.output('bloburi');
+                    //const pdfData = pdf2.output('arraybuffer');
+                    //const pdfData = pdf2.output('datauristring');
+                    //const pdfData = pdf2.output('dataurlnewwindow');
+                });
+
+                //const exporter = new Html2Pdf(html,{filename:"Nota Simple.pdf"});
+                //exporter.getPdf(true);
             }
-          },
+        },
     });
 
     const onChangePaymentAmount = (value: any) => {
@@ -237,20 +245,21 @@ const PaymentPage: React.FC = () => {
             <br />
             <br />
             {currentStep === 1 && (
-                <Form {...layout} form={form} name="paymentForm" onFinish={handleSubmit} 
-                initialValues={
-                    {   paymentNo: formValues.paymentNo,
-                        userCode: formValues.userCode,
-                        firstName: formValues.firstName,
-                        lastName: formValues.lastName,
-                        receiptDate: formValues.receiptDate,
-                        paymentOption: formValues.paymentOption,
-                        paymentAmount: formValues.paymentAmount,
-                        totalAmount: formValues.totalAmount,
-                        payee: formValues.payee,
-                        emailTo: formValues.emailTo,
-                    }
-                } >
+                <Form {...layout} form={form} name="paymentForm" onFinish={handleSubmit}
+                    initialValues={
+                        {
+                            paymentNo: formValues.paymentNo,
+                            userCode: formValues.userCode,
+                            firstName: formValues.firstName,
+                            lastName: formValues.lastName,
+                            receiptDate: formValues.receiptDate,
+                            paymentOption: formValues.paymentOption,
+                            paymentAmount: formValues.paymentAmount,
+                            totalAmount: formValues.totalAmount,
+                            payee: formValues.payee,
+                            emailTo: formValues.emailTo,
+                        }
+                    } >
                     <Form.Item
                         label="Payment Running No."
                         name="paymentNo"
@@ -345,7 +354,7 @@ const PaymentPage: React.FC = () => {
                         label="Email to"
                         name="emailTo"
                         rules={[{ required: true, message: 'Please input the email!' }
-                        , { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Please enter a valid email address!', }]}
+                            , { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Please enter a valid email address!', }]}
                     >
                         <Input />
                     </Form.Item>
@@ -371,7 +380,7 @@ const PaymentPage: React.FC = () => {
                     <Button type="primary" htmlType="button" onClick={() => handlePrintOut(formValues)}>
                         Save Receipt & Print
                     </Button>
-                    
+
                 </>
 
             )}
@@ -389,18 +398,18 @@ const PaymentPage: React.FC = () => {
             )}
 
             {currentStep === 4 && (
-               <Result
-                status="success"
-                title="Successfully Payment and Sent Email"
-                subTitle={`Payment number: ${formValues.paymentNo} is completed, next step.`}
-                extra={[
-                  <Button type="primary" key="go_back_home" onClick={() => { history.push(`/class/search`)}}>
-                    Go Main
-                  </Button>,
-                  <Button key="create_payment_for_next" onClick={() => {  resetToNewOne() }} >Go Next Payment</Button>,
-                    //Button to reload page to create new payment   
-                ]}
-              />
+                <Result
+                    status="success"
+                    title="Successfully Payment and Sent Email"
+                    subTitle={`Payment number: ${formValues.paymentNo} is completed, next step.`}
+                    extra={[
+                        <Button type="primary" key="go_back_home" onClick={() => { history.push(`/class/search`) }}>
+                            Go Main
+                        </Button>,
+                        <Button key="create_payment_for_next" onClick={() => { resetToNewOne() }} >Go Next Payment</Button>,
+                        //Button to reload page to create new payment   
+                    ]}
+                />
 
             )}
 
