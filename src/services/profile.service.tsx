@@ -317,6 +317,9 @@ export async function sendReceiptMail(formValues: any,pdfFile: Blob){
     form.append('userCode', formValues.userCode )
     form.append('emailTo', formValues.emailTo )
 
+    //print pdfFile size to console
+    console.log('upload pdfFile with size',pdfFile.size)
+
     const requestOptions = {
         method: 'POST',
         headers: { 'cache-control' : 'no-cache'},
