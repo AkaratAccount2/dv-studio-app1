@@ -18,6 +18,9 @@ export function LandingPage() {
                 <div style={{ fontSize: '12px', fontWeight: 'bold', marginLeft: '-2px' ,marginTop: '0px' }}>(Art Gallary & Education School)</div>
             </div>
             <LogInPage />
+            <div className="welcome" style={{ paddingTop: '20px' }}>
+                <div style={{ fontSize: '12px', fontWeight: 'bold', marginLeft: '-2px' ,marginTop: '0px' }}>Version 2023-03-19 release 1</div>
+            </div>
         </div>
     )
 }
