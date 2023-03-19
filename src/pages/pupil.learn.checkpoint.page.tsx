@@ -3,7 +3,7 @@ import type { InputRef } from 'antd';
 import { Button, Form, Input, Popconfirm, Table, DatePicker, Descriptions, Layout, message } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import type { FormInstance } from 'antd/es/form';
-import { getCheckpointlearn, getProfilelearn, saveOrUpdateCheckpoint ,removeCheckpoint} from './../services/profile.service'
+import { getCheckpointlearn, getProfilelearn, saveOrUpdateCheckpoint, removeCheckpoint } from './../services/profile.service'
 import { convertUTCDateTimeToBangkokLocalTime } from './../services/utils'
 import { useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router'
@@ -260,7 +260,7 @@ const PupilLearnCheckPointPaege: React.FC<Props> = (props: Props) => {
             dataIndex: 'operation',
             render: (_, record: {}, idx: number) =>
                 dataSource.length >= 1 ? (
-                    <Popconfirm title="Sure to delete?" onConfirm={ async() => {
+                    <Popconfirm title="Sure to delete?" onConfirm={async () => {
                         message.loading({ content: 'Deleting...', key: 'deletable' })
                         await removeCheckpoint(record, learnNo, profile?.usercode)
                         message.success({ content: 'Deleted!', key: 'deletable', duration: 2 });
@@ -351,7 +351,7 @@ const PupilLearnCheckPointPaege: React.FC<Props> = (props: Props) => {
                 <br />
                 <br />
                 <div>
-                     {/* [ current count is {count}] */}
+                    {/* [ current count is {count}] */}
                     <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
                         Add a row
                     </Button>

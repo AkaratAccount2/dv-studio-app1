@@ -3,13 +3,15 @@ import { Layout, Modal, Form, Input, DatePicker, Select, Button, Steps, InputNum
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBahtSign } from '@fortawesome/free-solid-svg-icons';
 //import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
-import { getPaymentOption, sendReceiptMail, saveNewPayment } from './../services/profile.service'
+import { getPaymentOption,  sendReceiptMailWithoutFile, saveNewPayment } from './../services/profile.service'
 import { useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router'
 import { useReactToPrint } from 'react-to-print';
 import html2canvas from 'html2canvas';
 import * as _jspdf from 'jspdf';
 import ReceiptDocument from './../components/payment.receipt';
+import AWS from 'aws-sdk'
+import { buffer } from 'stream/consumers';
 
 interface OptionType {
     name: string;
@@ -84,7 +86,7 @@ const PaymentPage: React.FC = () => {
     //*** Begin: Handle selection drop down */
     const [options, setOptions] = useState<OptionType[]>([]);
     const [loading, setLoading] = useState(true);
-    
+
     useEffect(() => {
         const fetchOptions = async () => {
             try {
@@ -99,14 +101,7 @@ const PaymentPage: React.FC = () => {
         fetchOptions();
     }, [currentStep])
 
-    const handleSubmit = (values: any) => {
-        console.log('Received values of form: ', values);
-        setFormValues(values);
-        setCurrentStep(2)
-
-        console.log(`Go to step : ${currentStep}`);
-    };
-
+    /** STEP #1 */
     const generatePaymentCode = async () => {
         const currentYear = new Date().getFullYear().toString().substr(-2);
         const currentMonth = ('0' + (new Date().getMonth() + 1).toString()).substr(-2);
@@ -119,22 +114,112 @@ const PaymentPage: React.FC = () => {
         form.setFieldsValue({ paymentNo: _formValues.paymentNo });
     }
 
+    const handleSubmit = (values: any) => {
+        console.log('Received values of form: ', values);
+        setFormValues(values);
+        setCurrentStep(2)
+
+        console.log(`Go to step : ${currentStep}`);
+    };
+
+    /** STEP #2 */
     const handlePrintOut = async (values: FormValues) => {
         //callComponentView();
+
+        //Go to step 3
         callComponentPrint();
     };
-    //const callComponentView = useReactToPrint({
+    
+    //Inside the component callComponentPrint()
+    //function to save pdf to s3
+    const addPdfToS3Bucket = async (pdfData: Blob, receiptFileName: string) => {
+        //Go to step 3
+        setCurrentStep(3);
 
-    const sendBlobData = async(pdfData: Blob,values: FormValues) => {
-         setCurrentStep(3)
-         //save payment to database
-         await saveNewPayment(formValues)
-         //wait 3 seconds
-         await new Promise(resolve => setTimeout(resolve, 3000));
- 
-         //send it email
-         await sendReceiptMail(values, pdfData ?? new Blob())
-         setCurrentStep(4);
+        const S3_BUCKET ='dv-receipts';
+        const REGION ='ap-southeast-1';
+        //set BufferSize to 64MB
+        const BUFFER_SIZE = 64 * 1024 * 1024;
+        //set the AWS configuration using the access keys provided in the email you received
+
+        AWS.config.update({
+            accessKeyId: 'AKIAQHS4IHLX2QIJJGE3',
+            secretAccessKey: '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'
+            
+        })
+
+        const s3 = new AWS.S3({ 
+            region: REGION,
+            params: { Bucket: S3_BUCKET }   
+        });
+
+        const params = {
+            Bucket: S3_BUCKET,
+            Key: receiptFileName,
+            Body: pdfData,
+            ACL: 'public-read'
+        };
+
+        console.log(`Uploading ${receiptFileName} file to S3 bucket...`);
+        s3.putObject(params)
+        .on('httpUploadProgress', (evt) => {
+            console.log(evt.loaded + ' of ' + evt.total + ' Bytes');
+            //setProgress(Math.round((evt.loaded / evt.total) * 100))
+        })    
+        .send((err) => {
+            if (err) {
+                console.log(err)
+            }else{
+                console.log('File uploaded successfully.')    
+            }
+        })
+
+        //wait for 2 seconds
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        //return s3.getSignedUrl('getObject', { Bucket: S3_BUCKET, Key: receiptFileName });
+        return `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/${receiptFileName}`;
+    }
+
+    function blobToArray(blob: Blob): BlobPart[] {
+        const fileReader = new FileReader();
+        const chunks: BlobPart[] = [];
+        const chunkSize = 2097152; // 2 MB chunk sizes.
+        const totalChunks = Math.ceil(blob.size / chunkSize);
+
+        for (let i = 0; i < totalChunks; i++) {
+            const start = i * chunkSize;
+            const end = start + chunkSize >= blob.size ? blob.size : start + chunkSize;
+            chunks.push(blob.slice(start, end));
+        }
+
+        return chunks;
+    }
+
+    //Inside the component callComponentPrint()
+    const savePaymentAndSendMail = async (pdfData: Blob, values: FormValues) => {
+        
+        //save payment to database
+        await saveNewPayment(formValues)
+        //wait 3 seconds
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        //send it email
+        await sendReceiptMailWithoutFile(values) //, pdfData ?? new Blob()
+        setCurrentStep(4);
+    }
+
+    const sendHtmlData = async (htmlData: HTMLHtmlElement, values: FormValues) => {
+        setCurrentStep(3)
+        //save payment to database
+        await saveNewPayment(formValues)
+        //wait 3 seconds
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        //send it email
+
+        await sendReceiptMailWithoutFile(values ) //, htmlData==null?new HTMLHtmlElement():htmlData
+        setCurrentStep(4);
     }
 
     //Hook service to print a document
@@ -151,14 +236,28 @@ const PaymentPage: React.FC = () => {
                     const imgData = canvas.toDataURL('image/png');
                     // You can use the imgData in your project as you see fit.
                     var pdf = new _jspdf.default();
-                    pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
-                    pdf.save(formValues.paymentNo + '.pdf')
-                    //get pdf   
-                    let pdf2 = new _jspdf.default(); //_jspdf.default('p', 'pt', 'a4');
-                    pdf2.addImage(imgData, 'PNG', 0, 0, 210, 297);
-                    let pdfData = pdf2.output('blob');
+                    //pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
+                    pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297, 'someAlias', 'FAST');
+                    let savedPDF = pdf.save(formValues.paymentNo + '.pdf')
+                    console.log('Image saved to pdf');
 
-                    await sendBlobData(pdfData,formValues);
+                    // //get pdf   
+                    // let pdf2 = new _jspdf.default(); //_jspdf.default('p', 'pt', 'a4');
+                    // pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297, 'someAlias', 'FAST');//pdf2.addImage(imgData, 'PNG', 0, 0, 210, 297);
+                    
+                    let pdfData = savedPDF.output('blob');
+                    console.log('set pdfData: ', pdfData);
+
+                    //wait 3`s
+                    console.log('wait 3 seconds');
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+
+                    //add to S3 bucket
+                    await addPdfToS3Bucket(pdfData, formValues.paymentNo + '.pdf')
+                    await savePaymentAndSendMail(pdfData, formValues)
+                    //await sendHtmlData(html, formValues);
+                    //await sendBlobData(pdfData,formValues);
+
                     //const pdfData = pdf2.output('bloburi');
                     //const pdfData = pdf2.output('arraybuffer');
                     //const pdfData = pdf2.output('datauristring');

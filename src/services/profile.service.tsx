@@ -308,28 +308,64 @@ export async function removeCheckpoint(recordValues: any, learnNo: string ,userc
 }
 //########### PAYMENT ,SEND MAIL #######
 //function to POST blob data to server
-export async function sendReceiptMail(formValues: any,pdfFile: Blob){
+
+// export async function sendReceiptMail(formValues: any,pdfFile: Blob){
+//     const form = new FormData();
+//     console.log('pdfFile size',pdfFile.size)
+//     form.append('pdfFile', pdfFile)  //  file, { knownLength: file.size } );
+//     form.append('paymentNo', formValues.paymentNo) 
+//     form.append('firstName', formValues.firstName)
+//     form.append('userCode', formValues.userCode )
+//     form.append('emailTo', formValues.emailTo )
+
+//     //print pdfFile size to console
+//     console.log('upload pdfFile with size',pdfFile.size)
+
+//     const requestOptions = {
+//         method: 'POST',
+//         headers: { 'cache-control' : 'no-cache'},
+//         body: form
+//     };
+//     const host = process.env.REACT_APP_SERVER_HOST || ''
+//     const route_path = process.env.REACT_APP_CONTEXT_PATH || ''
+
+//     try {
+//         const response = await fetch(host+route_path+ `/v1/payment/mail`, requestOptions)
+//         const data = await response.json()
+//         if (!response.ok) {
+//             const error = (data && data.message) || response.status
+//             return Promise.reject(error)
+//         }
+//         return data.results
+//     } catch (error_1) {
+//         console.error('There was an error!', error_1)
+//     }
+// }
+
+export async function sendReceiptMailWithoutFile(formValues: any){
+
     const form = new FormData();
-    console.log('pdfFile size',pdfFile.size)
-    form.append('pdfFile', pdfFile)  //  file, { knownLength: file.size } );
     form.append('paymentNo', formValues.paymentNo) 
     form.append('firstName', formValues.firstName)
     form.append('userCode', formValues.userCode )
     form.append('emailTo', formValues.emailTo )
 
-    //print pdfFile size to console
-    console.log('upload pdfFile with size',pdfFile.size)
-
     const requestOptions = {
         method: 'POST',
-        headers: { 'cache-control' : 'no-cache'},
-        body: form
+        headers: {
+            'Content-Type': 'application/json' ,'cache-control' : 'no-cache'},
+        body: JSON.stringify({
+            'paymentNo': formValues.paymentNo,
+            'firstName': formValues.firstName,
+            'userCode': formValues.userCode,
+            'emailTo': formValues.emailTo
+        })
     };
     const host = process.env.REACT_APP_SERVER_HOST || ''
     const route_path = process.env.REACT_APP_CONTEXT_PATH || ''
 
     try {
-        const response = await fetch(host+route_path+ `/v1/payment/mail`, requestOptions)
+        const response = await fetch(host+route_path+ `/v1/payment/mail2`, requestOptions)
         const data = await response.json()
         if (!response.ok) {
             const error = (data && data.message) || response.status
